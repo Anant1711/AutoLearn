@@ -34,7 +34,9 @@ export const CANLog: React.FC<CANLogProps> = ({ messages }) => {
                             <span className="text-yellow-500 font-bold w-16">0x{msg.id.toString(16).toUpperCase()}</span>
                             <span className="text-cyan-400 font-bold w-32">{msg.name}</span>
                             <span className="text-emerald-400 flex-1">
-                                {Object.entries(msg.data).map(([key, value]) => `${key}: ${Math.round(value)}`).join(', ')}
+                                {Object.entries(msg.data).map(([key, value]) =>
+                                    `${key}: ${typeof value === 'number' ? Math.round(value) : value}`
+                                ).join(', ')}
                             </span>
                             <span className="text-gray-600 text-[10px]">RAW: {msg.rawValue}</span>
                         </div>

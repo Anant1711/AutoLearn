@@ -17,6 +17,9 @@ function App() {
   const [activeView, setActiveView] = useState<'simulator' | 'diagnostics' | 'architecture' | 'tutorials' | 'community'>('simulator');
   const [speed, setSpeed] = useState(0);
   const [rpm, setRpm] = useState(0);
+  const [gear, setGear] = useState('P');
+  const [headlights, setHeadlights] = useState('off');
+  const [turnSignals, setTurnSignals] = useState('off');
   const [messages, setMessages] = useState<CANMessage[]>([]);
 
   useEffect(() => {
@@ -33,6 +36,12 @@ function App() {
         setSpeed(msg.data.speed);
       } else if (msg.id === 0x456) {
         setRpm(msg.data.rpm);
+      } else if (msg.id === 0xABC && msg.data.gear) {
+        setGear(String(msg.data.gear));
+      } else if (msg.id === 0xDEF && msg.data.headlights) {
+        setHeadlights(String(msg.data.headlights));
+      } else if (msg.id === 0x321 && msg.data.signals) {
+        setTurnSignals(String(msg.data.signals));
       }
 
       // Add to log (keep last 50 messages)
@@ -44,23 +53,24 @@ function App() {
     };
   }, []);
 
-  const handleControl = (action: 'accelerate' | 'brake', pressed: boolean) => {
+
+  const handleControl = (action: string, pressed?: boolean, value?: any) => {
     if (socket) {
-      socket.emit('control', { action, pressed });
+      socket.emit('control', { action, pressed, value });
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white font-sans selection:bg-cyan-500 selection:text-white">
+    <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-cyan-500 selection:text-white">
       {/* Header */}
-      <header className="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50">
+      <header className="bg-white border-b border-gray-200 p-4 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-gradient-to-tr from-cyan-500 to-blue-600 p-2 rounded-lg shadow-lg shadow-cyan-500/20">
               <Car size={24} className="text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+              <h1 className="text-xl font-bold text-gray-900">
                 AutoLearn Studio
               </h1>
               <p className="text-xs text-gray-500 uppercase tracking-widest">Interactive Protocol Simulator</p>
@@ -69,31 +79,46 @@ function App() {
           <div className="flex gap-4 text-sm font-medium text-gray-400">
             <span
               onClick={() => setActiveView('simulator')}
-              className={`cursor-pointer transition-colors ${activeView === 'simulator' ? 'text-cyan-400' : 'hover:text-white'}`}
+              className={`px-4 py-2 rounded-lg transition-colors cursor-pointer ${activeView === 'simulator'
+                  ? 'bg-cyan-500 text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
             >
               Simulator
             </span>
             <span
               onClick={() => setActiveView('diagnostics')}
-              className={`cursor-pointer transition-colors ${activeView === 'diagnostics' ? 'text-cyan-400' : 'hover:text-white'}`}
+              className={`px-4 py-2 rounded-lg transition-colors cursor-pointer ${activeView === 'diagnostics'
+                  ? 'bg-cyan-500 text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
             >
               Diagnostics
             </span>
             <span
               onClick={() => setActiveView('architecture')}
-              className={`cursor-pointer transition-colors ${activeView === 'architecture' ? 'text-cyan-400' : 'hover:text-white'}`}
+              className={`px-4 py-2 rounded-lg transition-colors cursor-pointer ${activeView === 'architecture'
+                  ? 'bg-cyan-500 text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
             >
               Architecture
             </span>
             <span
               onClick={() => setActiveView('tutorials')}
-              className={`cursor-pointer transition-colors ${activeView === 'tutorials' ? 'text-cyan-400' : 'hover:text-white'}`}
+              className={`px-4 py-2 rounded-lg transition-colors cursor-pointer ${activeView === 'tutorials'
+                  ? 'bg-cyan-500 text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
             >
               Tutorials
             </span>
             <span
               onClick={() => setActiveView('community')}
-              className={`cursor-pointer transition-colors ${activeView === 'community' ? 'text-cyan-400' : 'hover:text-white'}`}
+              className={`px-4 py-2 rounded-lg transition-colors cursor-pointer ${activeView === 'community'
+                  ? 'bg-cyan-500 text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
             >
               Community
             </span>
@@ -108,15 +133,15 @@ function App() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
             {/* Left Column: Dashboard & Controls */}
             <div className="lg:col-span-2 flex flex-col gap-6">
-              <Dashboard speed={speed} rpm={rpm} />
-              <Controls onControl={handleControl} />
+              <Dashboard speed={speed} rpm={rpm} gear={gear} headlights={headlights} turnSignals={turnSignals} />
+              <Controls onControl={handleControl} currentGear={gear} currentHeadlights={headlights} currentTurnSignals={turnSignals} />
 
               {/* Info Card */}
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                <h3 className="text-gray-400 text-sm uppercase tracking-wider mb-2">How it works</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  Press and hold <span className="text-emerald-400 font-bold">Accelerate</span> to increase engine RPM and vehicle speed.
-                  The backend simulates the vehicle physics and broadcasts <span className="text-yellow-400 font-mono">CAN Frames</span> via WebSocket.
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-xl p-6 shadow-sm">
+                <h3 className="text-blue-900 text-sm font-bold uppercase tracking-wider mb-3">How it works</h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  Press and hold <span className="text-emerald-600 font-bold">Accelerate</span> to increase engine RPM and vehicle speed.
+                  The backend simulates the vehicle physics and broadcasts <span className="text-blue-600 font-mono font-semibold">CAN Frames</span> via WebSocket.
                   Watch the traffic log to see the raw data changing in real-time.
                 </p>
               </div>

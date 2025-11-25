@@ -79,7 +79,7 @@ export const ServiceControl: React.FC<ServiceControlProps> = ({ onSendRequest })
                     <div className="space-y-4">
                         <div className="text-sm text-gray-400 mb-4">Service 0x19: Read DTC Information</div>
                         <button
-                            onClick={() => onSendRequest(0x19, 0x02, [0xFF])} // Report by Status Mask
+                            onClick={() => onSendRequest(0x19, 0x02, [0xFF])} // Report by Status Mask (All)
                             className="w-full flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors group"
                         >
                             <div className="flex items-center gap-3">
@@ -87,6 +87,46 @@ export const ServiceControl: React.FC<ServiceControlProps> = ({ onSendRequest })
                                 <span className="text-white font-medium">Read All DTCs</span>
                             </div>
                             <Send size={16} className="text-gray-500 group-hover:text-cyan-400 transition-colors" />
+                        </button>
+                        <button
+                            onClick={() => onSendRequest(0x19, 0x02, [0x08])} // Confirmed DTCs only (bit 3)
+                            className="w-full flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <Activity size={20} className="text-red-500" />
+                                <span className="text-white font-medium">Read Confirmed DTCs</span>
+                            </div>
+                            <Send size={16} className="text-gray-500 group-hover:text-cyan-400 transition-colors" />
+                        </button>
+                        <button
+                            onClick={() => onSendRequest(0x19, 0x02, [0x04])} // Pending DTCs only (bit 2)
+                            className="w-full flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <Activity size={20} className="text-orange-500" />
+                                <span className="text-white font-medium">Read Pending DTCs</span>
+                            </div>
+                            <Send size={16} className="text-gray-500 group-hover:text-cyan-400 transition-colors" />
+                        </button>
+                        <button
+                            onClick={() => onSendRequest(0x19, 0x04)} // Read Freeze Frame
+                            className="w-full flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <Database size={20} className="text-blue-500" />
+                                <span className="text-white font-medium">Read Freeze Frame Data</span>
+                            </div>
+                            <Send size={16} className="text-gray-500 group-hover:text-cyan-400 transition-colors" />
+                        </button>
+                        <button
+                            onClick={() => onSendRequest(0x14)} // Clear DTC
+                            className="w-full flex items-center justify-between p-4 bg-red-900/30 border border-red-800 rounded-lg hover:bg-red-900/50 transition-colors group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <Activity size={20} className="text-red-400" />
+                                <span className="text-red-300 font-medium">Clear All DTCs</span>
+                            </div>
+                            <Send size={16} className="text-red-500 group-hover:text-red-400 transition-colors" />
                         </button>
                     </div>
                 )}

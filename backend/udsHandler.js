@@ -1,6 +1,7 @@
 // UDS Constants
 const SERVICES = {
     DIAGNOSTIC_SESSION_CONTROL: 0x10,
+    CLEAR_DIAGNOSTIC_INFORMATION: 0x14,
     READ_DTC_INFORMATION: 0x19,
     READ_DATA_BY_IDENTIFIER: 0x22,
     SECURITY_ACCESS: 0x27,
@@ -22,10 +23,43 @@ let seed = 0x0000;
 let expectedKey = 0x0000;
 
 // Dummy Data
+// DTC Status Byte:
+// Bit 0: TestFailed
+// Bit 1: TestFailedThisOperationCycle
+// Bit 2: PendingDTC
+// Bit 3: ConfirmedDTC
+// Bit 4: TestNotCompletedSinceLastClear
+// Bit 5: TestFailedSinceLastClear
+// Bit 6: TestNotCompletedThisOperationCycle
+// Bit 7: WarningIndicatorRequested
+
 const DTCS = [
-    { code: 'P0301', status: 0x2F, description: 'Cylinder 1 Misfire Detected' },
-    { code: 'P0420', status: 0x09, description: 'Catalyst System Efficiency Below Threshold' },
-    { code: 'U0100', status: 0x2F, description: 'Lost Communication With ECM/PCM A' },
+    // Active/Confirmed DTCs (bit 3 set = 0x08, bit 0 set = 0x01, bit 7 set = 0x80)
+    { code: 'P0301', status: 0x8F, description: 'Cylinder 1 Misfire Detected', system: 'Engine' },
+    { code: 'U0100', status: 0x8F, description: 'Lost Communication With ECM/PCM A', system: 'Network' },
+    { code: 'C0035', status: 0x89, description: 'Left Front Wheel Speed Sensor Circuit', system: 'ABS' },
+
+    // Pending DTCs (bit 2 set = 0x04, bit 1 set = 0x02)
+    { code: 'P0420', status: 0x06, description: 'Catalyst System Efficiency Below Threshold', system: 'Emissions' },
+    { code: 'P0171', status: 0x04, description: 'System Too Lean (Bank 1)', system: 'Fuel' },
+
+    // Permanent DTCs (emissions-related, bit 3 + bit 5 = 0x28)
+    { code: 'P0442', status: 0x28, description: 'EVAP System Leak Detected (Small Leak)', system: 'Emissions' },
+
+    // Historical DTCs (not currently active, bit 5 set = 0x20)
+    { code: 'P0128', status: 0x20, description: 'Coolant Thermostat (Coolant Temp Below Thermostat Regulating Temp)', system: 'Cooling' },
+    { code: 'B0001', status: 0x20, description: 'Driver Airbag Circuit Short to Ground', system: 'Airbag' },
+];
+
+// Healthy Systems (no DTCs)
+const HEALTHY_SYSTEMS = [
+    'Transmission Control Module',
+    'Body Control Module',
+    'Climate Control System',
+    'Instrument Cluster',
+    'Power Steering Control',
+    'Tire Pressure Monitoring System',
+    'Parking Assist System'
 ];
 
 const DIDS = {
@@ -45,8 +79,12 @@ function handleUDSRequest(socket, data) {
                 handleSessionControl(subFunction, response);
                 break;
 
+            case SERVICES.CLEAR_DIAGNOSTIC_INFORMATION:
+                handleClearDTC(response);
+                break;
+
             case SERVICES.READ_DTC_INFORMATION:
-                handleReadDTC(subFunction, response);
+                handleReadDTC(subFunction, payload, response);
                 break;
 
             case SERVICES.READ_DATA_BY_IDENTIFIER:
@@ -87,12 +125,39 @@ function handleSessionControl(subFunction, response) {
     response.data = [subFunction, 0x00, 0x32, 0x01, 0xF4]; // P2/P2* timings
 }
 
-function handleReadDTC(subFunction, response) {
+function handleClearDTC(response) {
+    // In a real ECU, this would clear stored DTCs
+    // For simulation, we'll just acknowledge
+    response.data = [0x00]; // Positive response
+}
+
+function handleReadDTC(subFunction, payload, response) {
+    response.data = [subFunction]; // Echo subfunction
+
     if (subFunction === 0x02) { // Report DTC by Status Mask
-        response.data = [0x02]; // Echo subfunction
+        const statusMask = payload ? payload[0] : 0xFF; // Default to all
+
         DTCS.forEach(dtc => {
-            // Simplified: Just sending raw bytes for code + status
-            // P0301 -> 0x0301 (simplified hex representation for demo)
+            // Filter by status mask
+            if ((dtc.status & statusMask) !== 0) {
+                const codeBytes = parseInt(dtc.code.substring(1), 16);
+                response.data.push((codeBytes >> 8) & 0xFF, codeBytes & 0xFF, dtc.status);
+            }
+        });
+    } else if (subFunction === 0x04) { // Report DTC Snapshot/Freeze Frame
+        // Return freeze frame data for first DTC
+        if (DTCS.length > 0) {
+            const dtc = DTCS[0];
+            const codeBytes = parseInt(dtc.code.substring(1), 16);
+            response.data.push((codeBytes >> 8) & 0xFF, codeBytes & 0xFF);
+            // Add freeze frame data (simplified: RPM, Speed, Coolant Temp)
+            response.data.push(0x01, 0x0C, 0x10, 0x00); // RPM = 4096
+            response.data.push(0x01, 0x0D, 0x3C); // Speed = 60 km/h
+            response.data.push(0x01, 0x05, 0x50); // Coolant = 80°C
+        }
+    } else if (subFunction === 0x0A) { // Report Supported DTC
+        // Return all DTCs
+        DTCS.forEach(dtc => {
             const codeBytes = parseInt(dtc.code.substring(1), 16);
             response.data.push((codeBytes >> 8) & 0xFF, codeBytes & 0xFF, dtc.status);
         });

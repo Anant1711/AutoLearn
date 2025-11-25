@@ -22,7 +22,13 @@ let vehicleState = {
     speed: 0,
     rpm: 800,
     accelerating: false,
-    braking: false
+    braking: false,
+    steering: 0, // -100 (full left) to +100 (full right)
+    gear: 'P', // P, R, N, D
+    headlights: 'off', // off, on, high
+    turnSignals: 'off', // off, left, right, hazard
+    odometer: 12345, // km
+    fuelLevel: 75 // percentage
 };
 
 // Simulation Loop
@@ -48,7 +54,7 @@ setInterval(() => {
         data: {
             speed: vehicleState.speed
         },
-        rawValue: vehicleState.speed // Simplified for MVP
+        rawValue: vehicleState.speed
     });
 
     // RPM (ID: 0x456)
@@ -60,6 +66,53 @@ setInterval(() => {
             rpm: vehicleState.rpm
         },
         rawValue: vehicleState.rpm
+    });
+
+    // Steering Angle (ID: 0x789)
+    io.emit('can-message', {
+        id: 0x789,
+        name: 'Steering_Angle',
+        timestamp: Date.now(),
+        data: {
+            angle: vehicleState.steering
+        },
+        rawValue: vehicleState.steering
+    });
+
+    // Gear Position (ID: 0xABC)
+    const gearMap = { 'P': 0, 'R': 1, 'N': 2, 'D': 3 };
+    io.emit('can-message', {
+        id: 0xABC,
+        name: 'Gear_Position',
+        timestamp: Date.now(),
+        data: {
+            gear: vehicleState.gear
+        },
+        rawValue: gearMap[vehicleState.gear] || 0
+    });
+
+    // Lights Status (ID: 0xDEF)
+    const lightsMap = { 'off': 0, 'on': 1, 'high': 2 };
+    io.emit('can-message', {
+        id: 0xDEF,
+        name: 'Lights_Status',
+        timestamp: Date.now(),
+        data: {
+            headlights: vehicleState.headlights
+        },
+        rawValue: lightsMap[vehicleState.headlights] || 0
+    });
+
+    // Turn Signals (ID: 0x321)
+    const signalsMap = { 'off': 0, 'left': 1, 'right': 2, 'hazard': 3 };
+    io.emit('can-message', {
+        id: 0x321,
+        name: 'Turn_Signals',
+        timestamp: Date.now(),
+        data: {
+            signals: vehicleState.turnSignals
+        },
+        rawValue: signalsMap[vehicleState.turnSignals] || 0
     });
 
 }, 100); // 10Hz update
@@ -75,6 +128,14 @@ io.on('connection', (socket) => {
             vehicleState.accelerating = data.pressed;
         } else if (data.action === 'brake') {
             vehicleState.braking = data.pressed;
+        } else if (data.action === 'steer') {
+            vehicleState.steering = data.value; // -100 to +100
+        } else if (data.action === 'gear') {
+            vehicleState.gear = data.value; // P, R, N, D
+        } else if (data.action === 'headlights') {
+            vehicleState.headlights = data.value; // off, on, high
+        } else if (data.action === 'turnSignals') {
+            vehicleState.turnSignals = data.value; // off, left, right, hazard
         }
     });
 
