@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { Dashboard } from './components/Dashboard';
 import { Controls } from './components/Controls';
@@ -10,7 +10,7 @@ import { CANLog } from './components/CANLog';
 import type { CANMessage } from './types';
 import { Car } from 'lucide-react';
 
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000';
 
 function App() {
   const [socket, setSocket] = useState<Socket | null>(null);
