@@ -2,7 +2,14 @@
 
 **AutoLearn Studio** is an interactive, web-based platform designed to teach automotive protocols (CAN, UDS, LIN) through hands-on simulation. It provides a realistic environment to explore vehicle architectures, diagnose simulated faults, and understand network communication without needing physical hardware.
 
-![AutoLearn Studio Dashboard](https://via.placeholder.com/800x400?text=AutoLearn+Studio+Dashboard)
+## 🌐 Live Demo
+
+**Frontend**: [https://anant1711.github.io/AutoLearn/](https://anant1711.github.io/AutoLearn/)  
+**Backend**: [https://autolearn-cwhp.onrender.com](https://autolearn-cwhp.onrender.com)
+
+> **Note**: The backend is hosted on Render's free tier and may take 30-60 seconds to wake up on first connection.
+
+---
 
 ## 🌟 Features
 
@@ -35,6 +42,7 @@
 -   **Frontend**: React 18, Vite, TypeScript, Tailwind CSS, Framer Motion.
 -   **Backend**: Node.js, Express, Socket.io.
 -   **Communication**: WebSocket (Real-time full-duplex communication).
+-   **Deployment**: GitHub Pages (Frontend) + Render (Backend).
 
 ---
 
@@ -48,8 +56,8 @@
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/anant1711/Autolearn.git
-    cd autolearn-studio
+    git clone https://github.com/Anant1711/AutoLearn.git
+    cd AutoLearn
     ```
 
 2.  **Install Backend Dependencies**
@@ -64,12 +72,12 @@
     npm install
     ```
 
-### Running the Application
+### Running Locally
 
 1.  **Start the Backend Server**
     ```bash
     cd backend
-    node index.js
+    npm start
     ```
     *Server runs on `http://localhost:3000`*
 
@@ -104,10 +112,50 @@
 
 ---
 
+## 🌐 Deployment
+
+This project is deployed using a split architecture:
+- **Frontend**: GitHub Pages (static hosting)
+- **Backend**: Render (Node.js hosting)
+
+For detailed deployment instructions, see:
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Complete deployment guide
+- [QUICK_DEPLOY.md](QUICK_DEPLOY.md) - Quick reference for deployment
+
+### Deploy Your Own Instance
+
+1. Fork this repository
+2. Deploy the backend to [Render](https://render.com) (free tier available)
+3. Enable GitHub Pages in your repository settings
+4. Add your backend URL as a GitHub secret (`VITE_SOCKET_URL`)
+5. Push to `main` branch to trigger automatic deployment
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+---
+
+## 🙏 Acknowledgments
+
+- Built with modern web technologies for automotive education
+- Inspired by real-world automotive diagnostic tools
+- Designed for students, engineers, and automotive enthusiasts
+
+---
+
+**Made with ❤️ for the automotive community**
