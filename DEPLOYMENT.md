@@ -204,6 +204,8 @@ If you prefer not to use Render, here are alternatives:
 1. Check the Actions tab in your GitHub repository
 2. Verify `VITE_SOCKET_URL` secret is set correctly
 3. Ensure all dependencies are in `package.json`
+4. **Environment protection rules error**: If you see "Branch 'main' is not allowed to deploy to github-pages due to environment protection rules", the workflow file has been updated to remove the environment reference. Make sure you have the latest version of `.github/workflows/deploy.yml`
+
 
 ### Backend not responding
 
