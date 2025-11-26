@@ -119,11 +119,14 @@ setInterval(() => {
 
 const { handleUDSRequest } = require('./udsHandler');
 
+// Track connected users
+let connectedUsers = 0;
+
 io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
+    connectedUsers++;
+    io.emit('user-count', connectedUsers);
 
     socket.on('control', (data) => {
-        console.log('Control received:', data);
         if (data.action === 'accelerate') {
             vehicleState.accelerating = data.pressed;
         } else if (data.action === 'brake') {
@@ -144,7 +147,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
+        connectedUsers--;
+        io.emit('user-count', connectedUsers);
     });
 });
 
