@@ -176,7 +176,7 @@ export const Controls: React.FC<ControlsProps> = ({ onControl, currentGear = 'P'
                         onMouseLeave={() => onControl('accelerate', false)}
                         onTouchStart={(e) => { e.preventDefault(); onControl('accelerate', true); }}
                         onTouchEnd={(e) => { e.preventDefault(); onControl('accelerate', false); }}
-                        className="flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-emerald-900 active:border-b-0 active:translate-y-1 touch-none"
+                        className="flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-emerald-900 active:border-b-0 active:translate-y-1 touch-none user-select-none"
                     >
                         <ArrowUp size={28} className="text-white mb-1 md:mb-2 md:w-8 md:h-8" />
                         <span className="text-white font-bold uppercase tracking-wider text-xs md:text-sm">Accelerate</span>
@@ -188,7 +188,7 @@ export const Controls: React.FC<ControlsProps> = ({ onControl, currentGear = 'P'
                         onMouseLeave={() => onControl('brake', false)}
                         onTouchStart={(e) => { e.preventDefault(); onControl('brake', true); }}
                         onTouchEnd={(e) => { e.preventDefault(); onControl('brake', false); }}
-                        className="flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-gradient-to-b from-red-600 to-red-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-red-900 active:border-b-0 active:translate-y-1 touch-none"
+                        className="flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-gradient-to-b from-red-600 to-red-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-red-900 active:border-b-0 active:translate-y-1 touch-none user-select-none"
                     >
                         <ArrowDown size={28} className="text-white mb-1 md:mb-2 md:w-8 md:h-8" />
                         <span className="text-white font-bold uppercase tracking-wider text-xs md:text-sm">Brake</span>
