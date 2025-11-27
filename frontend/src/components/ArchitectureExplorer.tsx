@@ -45,9 +45,9 @@ export const ArchitectureExplorer: React.FC = () => {
     const [selectedECU, setSelectedECU] = useState<ECU | null>(null);
 
     return (
-        <div className="flex h-full gap-6">
+        <div className="flex flex-col lg:flex-row h-full gap-4 md:gap-6 p-4 md:p-0">
             {/* Canvas Area */}
-            <div className="flex-1 bg-gray-900 rounded-xl shadow-2xl border border-gray-800 relative overflow-hidden p-8">
+            <div className="flex-1 bg-gray-900 rounded-xl shadow-2xl border border-gray-800 relative overflow-hidden p-4 md:p-8 min-h-[400px] lg:min-h-0">
                 <div className="absolute top-4 left-4 flex items-center gap-2 text-gray-400">
                     <Network size={20} />
                     <span className="text-sm font-bold uppercase tracking-wider">Vehicle Topology</span>
@@ -141,16 +141,16 @@ export const ArchitectureExplorer: React.FC = () => {
             </div>
 
             {/* Sidebar Details */}
-            <div className={`w-80 bg-gray-900 rounded-xl shadow-2xl border border-gray-800 transition-all duration-300 ${selectedECU ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-50'}`}>
+            <div className={`w-full lg:w-80 bg-gray-900 rounded-xl shadow-2xl border border-gray-800 transition-all duration-300 ${selectedECU ? 'translate-x-0 opacity-100' : 'lg:translate-x-10 opacity-50'}`}>
                 {selectedECU ? (
-                    <div className="p-6 h-full flex flex-col">
+                    <div className="p-4 md:p-6 h-full flex flex-col">
                         <div className="flex justify-between items-start mb-6">
                             <div className="flex items-center gap-3">
                                 <div className={`p-3 rounded-lg ${selectedECU.type === 'gateway' ? 'bg-emerald-500/20 text-emerald-400' :
-                                        selectedECU.type === 'powertrain' ? 'bg-red-500/20 text-red-400' :
-                                            selectedECU.type === 'chassis' ? 'bg-orange-500/20 text-orange-400' :
-                                                selectedECU.type === 'body' ? 'bg-blue-500/20 text-blue-400' :
-                                                    selectedECU.type === 'infotainment' ? 'bg-purple-500/20 text-purple-400' : 'bg-green-500/20 text-green-400'
+                                    selectedECU.type === 'powertrain' ? 'bg-red-500/20 text-red-400' :
+                                        selectedECU.type === 'chassis' ? 'bg-orange-500/20 text-orange-400' :
+                                            selectedECU.type === 'body' ? 'bg-blue-500/20 text-blue-400' :
+                                                selectedECU.type === 'infotainment' ? 'bg-purple-500/20 text-purple-400' : 'bg-green-500/20 text-green-400'
                                     }`}>
                                     <Cpu size={24} />
                                 </div>
