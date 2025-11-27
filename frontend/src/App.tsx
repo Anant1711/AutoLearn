@@ -9,7 +9,7 @@ import { Community } from './components/Community';
 import { CANLog } from './components/CANLog';
 import { LoadingOverlay } from './components/LoadingOverlay';
 import type { CANMessage } from './types';
-import { Car, Users } from 'lucide-react';
+import { Car, Users, Menu, X } from 'lucide-react';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000';
 
@@ -25,6 +25,7 @@ function App() {
   const [activeUsers, setActiveUsers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const newSocket = io(SOCKET_URL);
@@ -107,7 +108,9 @@ function App() {
                 <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest hidden sm:block">Interactive Protocol Simulator</p>
               </div>
             </div>
-            <div className="flex gap-2 md:gap-4 text-xs md:text-sm font-medium text-gray-400 overflow-x-auto scrollbar-hide flex-nowrap">
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex gap-2 md:gap-4 text-xs md:text-sm font-medium text-gray-400">
               <span
                 onClick={() => setActiveView('simulator')}
                 className={`px-3 md:px-4 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap flex-shrink-0 ${activeView === 'simulator'
@@ -165,8 +168,127 @@ function App() {
                 </div>
               )}
             </div>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X size={24} className="text-gray-900" />
+              ) : (
+                <Menu size={24} className="text-gray-900" />
+              )}
+            </button>
           </div>
         </header>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div
+            className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+
+        {/* Mobile Slide-out Menu */}
+        <div
+          className={`md:hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+        >
+          <div className="flex flex-col h-full">
+            {/* Menu Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-lg font-bold text-gray-900">Menu</h2>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <X size={20} className="text-gray-900" />
+              </button>
+            </div>
+
+            {/* Menu Items */}
+            <nav className="flex-1 overflow-y-auto p-4">
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setActiveView('simulator');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeView === 'simulator'
+                      ? 'bg-cyan-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  Simulator
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveView('diagnostics');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeView === 'diagnostics'
+                      ? 'bg-cyan-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  Diagnostics
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveView('architecture');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeView === 'architecture'
+                      ? 'bg-cyan-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  Architecture
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveView('tutorials');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeView === 'tutorials'
+                      ? 'bg-cyan-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  Tutorials
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveView('community');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeView === 'community'
+                      ? 'bg-cyan-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  Community
+                </button>
+              </div>
+
+              {/* Active Users in Mobile Menu */}
+              {activeUsers >= 5 && (
+                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <Users size={14} className="text-green-600" />
+                    <span className="text-green-700 font-semibold text-sm">
+                      {activeUsers} online
+                    </span>
+                  </div>
+                </div>
+              )}
+            </nav>
+          </div>
+        </div>
 
         {/* Main Content */}
         <main className="container mx-auto p-3 md:p-6 h-[calc(100vh-60px)] md:h-[calc(100vh-80px)]">
