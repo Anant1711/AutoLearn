@@ -16,4 +16,13 @@
     scrollbar-width: none;
     /* Firefox */
   }
+
+  /* Prevent text selection on touch devices */
+  .select-none {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
 }
