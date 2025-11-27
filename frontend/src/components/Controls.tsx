@@ -59,9 +59,9 @@ export const Controls: React.FC<ControlsProps> = ({ onControl, currentGear = 'P'
     };
 
     return (
-        <div className="bg-gray-900 rounded-xl shadow-2xl border border-gray-800 p-6 space-y-4">
+        <div className="bg-gray-900 rounded-xl shadow-2xl border border-gray-800 p-4 md:p-6 space-y-3 md:space-y-4">
             {/* Row 1: Turn Signals, Steering, Headlights */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
                 {/* Turn Signals */}
                 <div>
                     <h4 className="text-gray-400 text-xs uppercase tracking-wider mb-2">Turn Signals</h4>
@@ -110,6 +110,8 @@ export const Controls: React.FC<ControlsProps> = ({ onControl, currentGear = 'P'
                             onMouseDown={() => onControl('steer', undefined, -50)}
                             onMouseUp={() => onControl('steer', undefined, 0)}
                             onMouseLeave={() => onControl('steer', undefined, 0)}
+                            onTouchStart={(e) => { e.preventDefault(); onControl('steer', undefined, -50); }}
+                            onTouchEnd={(e) => { e.preventDefault(); onControl('steer', undefined, 0); }}
                             className="flex-1 flex items-center justify-center h-12 bg-gradient-to-b from-blue-600 to-blue-800 rounded-lg shadow-lg active:scale-95 transition-all"
                         >
                             <ArrowLeft size={20} className="text-white" />
@@ -118,6 +120,8 @@ export const Controls: React.FC<ControlsProps> = ({ onControl, currentGear = 'P'
                             onMouseDown={() => onControl('steer', undefined, 50)}
                             onMouseUp={() => onControl('steer', undefined, 0)}
                             onMouseLeave={() => onControl('steer', undefined, 0)}
+                            onTouchStart={(e) => { e.preventDefault(); onControl('steer', undefined, 50); }}
+                            onTouchEnd={(e) => { e.preventDefault(); onControl('steer', undefined, 0); }}
                             className="flex-1 flex items-center justify-center h-12 bg-gradient-to-b from-blue-600 to-blue-800 rounded-lg shadow-lg active:scale-95 transition-all"
                         >
                             <ArrowRight size={20} className="text-white" />
@@ -146,7 +150,7 @@ export const Controls: React.FC<ControlsProps> = ({ onControl, currentGear = 'P'
             {/* Row 2: Gear Selector */}
             <div>
                 <h4 className="text-gray-400 text-xs uppercase tracking-wider mb-2">Gear</h4>
-                <div className="flex gap-2">
+                <div className="flex gap-1 md:gap-2">
                     {['P', 'R', 'N', 'D'].map((g) => (
                         <button
                             key={g}
@@ -165,25 +169,29 @@ export const Controls: React.FC<ControlsProps> = ({ onControl, currentGear = 'P'
             {/* Row 3: Accelerate/Brake */}
             <div>
                 <h4 className="text-gray-400 text-xs uppercase tracking-wider mb-2">Throttle & Brake</h4>
-                <div className="flex gap-4 justify-center">
+                <div className="flex gap-2 md:gap-4 justify-center">
                     <button
                         onMouseDown={() => onControl('accelerate', true)}
                         onMouseUp={() => onControl('accelerate', false)}
                         onMouseLeave={() => onControl('accelerate', false)}
-                        className="flex flex-col items-center justify-center w-32 h-32 bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-emerald-900 active:border-b-0 active:translate-y-1"
+                        onTouchStart={(e) => { e.preventDefault(); onControl('accelerate', true); }}
+                        onTouchEnd={(e) => { e.preventDefault(); onControl('accelerate', false); }}
+                        className="flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-emerald-900 active:border-b-0 active:translate-y-1 touch-none"
                     >
-                        <ArrowUp size={32} className="text-white mb-2" />
-                        <span className="text-white font-bold uppercase tracking-wider">Accelerate</span>
+                        <ArrowUp size={28} className="text-white mb-1 md:mb-2 md:w-8 md:h-8" />
+                        <span className="text-white font-bold uppercase tracking-wider text-xs md:text-sm">Accelerate</span>
                     </button>
 
                     <button
                         onMouseDown={() => onControl('brake', true)}
                         onMouseUp={() => onControl('brake', false)}
                         onMouseLeave={() => onControl('brake', false)}
-                        className="flex flex-col items-center justify-center w-32 h-32 bg-gradient-to-b from-red-600 to-red-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-red-900 active:border-b-0 active:translate-y-1"
+                        onTouchStart={(e) => { e.preventDefault(); onControl('brake', true); }}
+                        onTouchEnd={(e) => { e.preventDefault(); onControl('brake', false); }}
+                        className="flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-gradient-to-b from-red-600 to-red-800 rounded-lg shadow-lg active:scale-95 active:shadow-inner transition-all duration-150 border-b-4 border-red-900 active:border-b-0 active:translate-y-1 touch-none"
                     >
-                        <ArrowDown size={32} className="text-white mb-2" />
-                        <span className="text-white font-bold uppercase tracking-wider">Brake</span>
+                        <ArrowDown size={28} className="text-white mb-1 md:mb-2 md:w-8 md:h-8" />
+                        <span className="text-white font-bold uppercase tracking-wider text-xs md:text-sm">Brake</span>
                     </button>
                 </div>
             </div>
