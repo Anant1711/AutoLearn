@@ -4,6 +4,7 @@ import { Dashboard } from './components/Dashboard';
 import { Controls } from './components/Controls';
 import { UDSTester } from './components/UDSTester';
 import { ArchitectureExplorer } from './components/ArchitectureExplorer';
+import { Protocols } from './components/Protocols';
 import { Tutorials } from './components/Tutorials';
 import { Community } from './components/Community';
 import { CANLog } from './components/CANLog';
@@ -15,7 +16,7 @@ const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000';
 
 function App() {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [activeView, setActiveView] = useState<'simulator' | 'diagnostics' | 'architecture' | 'tutorials' | 'community'>('simulator');
+  const [activeView, setActiveView] = useState<'simulator' | 'diagnostics' | 'architecture' | 'protocols' | 'tutorials' | 'community'>('simulator');
   const [speed, setSpeed] = useState(0);
   const [rpm, setRpm] = useState(0);
   const [gear, setGear] = useState('P');
@@ -139,6 +140,15 @@ function App() {
                 Architecture
               </span>
               <span
+                onClick={() => setActiveView('protocols')}
+                className={`px-3 md:px-4 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap flex-shrink-0 ${activeView === 'protocols'
+                  ? 'bg-cyan-500 text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+              >
+                Protocols
+              </span>
+              <span
                 onClick={() => setActiveView('tutorials')}
                 className={`px-3 md:px-4 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap flex-shrink-0 ${activeView === 'tutorials'
                   ? 'bg-cyan-500 text-white'
@@ -250,6 +260,18 @@ function App() {
                 </button>
                 <button
                   onClick={() => {
+                    setActiveView('protocols');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeView === 'protocols'
+                      ? 'bg-cyan-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  Protocols
+                </button>
+                <button
+                  onClick={() => {
                     setActiveView('tutorials');
                     setIsMobileMenuOpen(false);
                   }}
@@ -320,6 +342,7 @@ function App() {
 
           {activeView === 'diagnostics' && <UDSTester socket={socket} />}
           {activeView === 'architecture' && <ArchitectureExplorer />}
+          {activeView === 'protocols' && <Protocols />}
           {activeView === 'tutorials' && <Tutorials />}
           {activeView === 'community' && <Community />}
 
