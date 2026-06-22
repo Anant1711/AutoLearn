@@ -1,0 +1,158 @@
+// Signature format: 2.0
+package vendor.visteon.tcu {
+
+  public class Call {
+    ctor public Call();
+    method public int describeContents();
+    method public final int getStability();
+    method public final void readFromParcel(android.os.Parcel);
+    method public final void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<vendor.visteon.tcu.Call> CREATOR;
+    field public int audioState;
+    field public int callId;
+    field public int callState;
+    field public int category;
+    field public String displayName;
+  }
+
+  public interface IInfotainmentModeManager {
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public void onInfotainmentStateChanged(int);
+    field public static final String DESCRIPTOR;
+    field public static final String HASH = "notfrozen";
+    field public static final int VERSION = 1; // 0x1
+  }
+
+  public static class IInfotainmentModeManager.Default implements vendor.visteon.tcu.IInfotainmentModeManager {
+    ctor public IInfotainmentModeManager.Default();
+    method public android.os.IBinder asBinder();
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public void onInfotainmentStateChanged(int);
+  }
+
+  public abstract static class IInfotainmentModeManager.Stub implements vendor.visteon.tcu.IInfotainmentModeManager {
+    ctor public IInfotainmentModeManager.Stub();
+    method public android.os.IBinder asBinder();
+    method public static vendor.visteon.tcu.IInfotainmentModeManager asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int);
+  }
+
+  public interface IKeyCodeManager {
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public void onKeyUp(int);
+    field public static final String DESCRIPTOR;
+    field public static final String HASH = "notfrozen";
+    field public static final int VERSION = 1; // 0x1
+  }
+
+  public static class IKeyCodeManager.Default implements vendor.visteon.tcu.IKeyCodeManager {
+    ctor public IKeyCodeManager.Default();
+    method public android.os.IBinder asBinder();
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public void onKeyUp(int);
+  }
+
+  public abstract static class IKeyCodeManager.Stub implements vendor.visteon.tcu.IKeyCodeManager {
+    ctor public IKeyCodeManager.Stub();
+    method public android.os.IBinder asBinder();
+    method public static vendor.visteon.tcu.IKeyCodeManager asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int);
+  }
+
+  public interface ITcuListener {
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public void onEcallStatusChanged(vendor.visteon.tcu.Call, int, int);
+    method public void onNetworkStatusChanged(vendor.visteon.tcu.NetworkInfo);
+    field public static final String DESCRIPTOR;
+    field public static final String HASH = "notfrozen";
+    field public static final int VERSION = 1; // 0x1
+  }
+
+  public static class ITcuListener.Default implements vendor.visteon.tcu.ITcuListener {
+    ctor public ITcuListener.Default();
+    method public android.os.IBinder asBinder();
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public void onEcallStatusChanged(vendor.visteon.tcu.Call, int, int);
+    method public void onNetworkStatusChanged(vendor.visteon.tcu.NetworkInfo);
+  }
+
+  public abstract static class ITcuListener.Stub implements vendor.visteon.tcu.ITcuListener {
+    ctor public ITcuListener.Stub();
+    method public android.os.IBinder asBinder();
+    method public static vendor.visteon.tcu.ITcuListener asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int);
+  }
+
+  public interface ITcuService {
+    method public vendor.visteon.tcu.NetworkInfo activeNetworkInfo();
+    method public void ecallStatusChangedEvent(vendor.visteon.tcu.Call, int, int);
+    method public void endCall(int, int);
+    method public String getIMEI();
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public String getMESN();
+    method public String getpasswd();
+    method public void onNetworkStatusChanged(vendor.visteon.tcu.NetworkInfo);
+    method public void registerInfotainmentModeClient(vendor.visteon.tcu.IInfotainmentModeManager);
+    method public void registerKeyCodeClient(vendor.visteon.tcu.IKeyCodeManager);
+    method public void registerTcuListener(vendor.visteon.tcu.ITcuListener);
+    method public void setDialPadInputRequest(String, int);
+    method public void startEmergencyCall(int);
+    method public void unregisterInfotainmentModeClient(vendor.visteon.tcu.IInfotainmentModeManager);
+    method public void unregisterKeyCodeClient(vendor.visteon.tcu.IKeyCodeManager);
+    method public void unregisterTcuListener(vendor.visteon.tcu.ITcuListener);
+    field public static final String DESCRIPTOR;
+    field public static final String HASH = "notfrozen";
+    field public static final int VERSION = 1; // 0x1
+  }
+
+  public static class ITcuService.Default implements vendor.visteon.tcu.ITcuService {
+    ctor public ITcuService.Default();
+    method public vendor.visteon.tcu.NetworkInfo activeNetworkInfo();
+    method public android.os.IBinder asBinder();
+    method public void ecallStatusChangedEvent(vendor.visteon.tcu.Call, int, int);
+    method public void endCall(int, int);
+    method public String getIMEI();
+    method public String getInterfaceHash();
+    method public int getInterfaceVersion();
+    method public String getMESN();
+    method public String getpasswd();
+    method public void onNetworkStatusChanged(vendor.visteon.tcu.NetworkInfo);
+    method public void registerInfotainmentModeClient(vendor.visteon.tcu.IInfotainmentModeManager);
+    method public void registerKeyCodeClient(vendor.visteon.tcu.IKeyCodeManager);
+    method public void registerTcuListener(vendor.visteon.tcu.ITcuListener);
+    method public void setDialPadInputRequest(String, int);
+    method public void startEmergencyCall(int);
+    method public void unregisterInfotainmentModeClient(vendor.visteon.tcu.IInfotainmentModeManager);
+    method public void unregisterKeyCodeClient(vendor.visteon.tcu.IKeyCodeManager);
+    method public void unregisterTcuListener(vendor.visteon.tcu.ITcuListener);
+  }
+
+  public abstract static class ITcuService.Stub implements vendor.visteon.tcu.ITcuService {
+    ctor public ITcuService.Stub();
+    method public android.os.IBinder asBinder();
+    method public static vendor.visteon.tcu.ITcuService asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int);
+  }
+
+  public class NetworkInfo {
+    ctor public NetworkInfo();
+    method public int describeContents();
+    method public final int getStability();
+    method public final void readFromParcel(android.os.Parcel);
+    method public final void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<vendor.visteon.tcu.NetworkInfo> CREATOR;
+    field public int networkStatus;
+    field public long networkTime;
+    field public int networkType;
+    field public int signalStrength;
+  }
+
+}
+
